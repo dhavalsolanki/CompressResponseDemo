@@ -1,0 +1,67 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+
+	<display-name>SLK HMIS Web Application</display-name>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>com.slktechlabs.hmis.system.HIMSServletContextListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<!-- Prior to Servlet 3.0 define either an error-code or an exception-type 
+		but not both -->
+	  <error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/servletError</location>
+	</error-page>
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/servletError</location>
+	</error-page>
+
+	<error-page>
+		<location>/servletError</location>
+	</error-page> 
+
+	
+	 <filter>
+		<filter-name>RestSecurityFilter</filter-name>
+		<filter-class>com.slktechlabs.hmis.system.oauth2.RestSecurityFilter</filter-class>
+	</filter>
+	 
+	<filter-mapping>
+		<filter-name>RestSecurityFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+	    <filter-name>GZIPFilter</filter-name>
+	    <filter-class>com.slktechlabs.hmis.system.oauth2.GzipFilter</filter-class>
+	</filter>
+	<filter-mapping>
+	    <filter-name>GZIPFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+</web-app>
